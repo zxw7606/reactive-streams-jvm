@@ -22,6 +22,14 @@ package org.reactivestreams;
 public interface Subscriber<T> {
 
     /**
+     * 约定：当调用 {@link Publisher#subscribe(Subscriber)}后要调用此方法.
+     *
+     * 大致流程就是 Subscriber#onSubscribe 完成业务逻辑之后可以再 Subscription#request(long) , Subscription#request(long) 会调用 Subscriber#onNext，
+     * 在 onNext 里面可以再生成 一些 Subscriber 订阅 onNext(T t) 的元素以此来完成链式调用.
+     * 通过Subscription#request(long) 可以控制消费的数量 或者通过Subscription#cancel()来停止
+     * <p>
+     * 为什么方法都是void因为该框架是为了解决异步时候调用的问题。因此类似于js, 但是又想避免类似回调地域的问题. 总体来说该API是为了响应异步而生的
+     * <p>
      * Invoked after calling {@link Publisher#subscribe(Subscriber)}.
      * <p>
      * No data will start flowing until {@link Subscription#request(long)} is invoked.
@@ -35,6 +43,7 @@ public interface Subscriber<T> {
     public void onSubscribe(Subscription s);
 
     /**
+     * 约定： 当
      * Data notification sent by the {@link Publisher} in response to requests to {@link Subscription#request(long)}.
      * 
      * @param t the element signaled
