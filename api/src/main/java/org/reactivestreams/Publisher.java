@@ -30,4 +30,10 @@ public interface Publisher<T> {
      * @param s the {@link Subscriber} that will consume signals from this {@link Publisher}
      */
     public void subscribe(Subscriber<? super T> s);
+
+    // 当调用 subscribe后 , 我们要 对 Subscriber 和  Subscription 绑定一个关系
+    // 具体逻辑是 new Subscription(Subscriber);
+    // 之后在Subscription 调用 Subscriber onSubscribe(Subscription) 方法形成一个绑定
+    // 由 Subscriber 来控制是否执行，
+    // 由 Subscription 来执行具体的业务逻辑，
 }
